@@ -1,0 +1,1 @@
+auditd.log.record_type : "SYSCALL" and (auditd.log.key : "modifications_of_bashrc\"ARCH=x86_64" or auditd.log.key : "modifications_of_bash_logout\"ARCH=x86_64")
