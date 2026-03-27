@@ -1,1 +1,25 @@
+title: Koske - System Boot Persistence via rc Scripts
+id: 9882a4b3-ea78-4d4b-bdd4-85e1a57de901
+status: experimental
+description: >
+  Detects modification of system startup scripts such as rc.local for persistence.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  selection:
+    auditd.log.key|contains:
+      - "modifications_of_rc_local"
+      - "modifications_of_rc_modules"
+  condition: selection
+
+falsepositives:
+  - System administration activities
+
+level: high
+tags:
+  - attack.persistence
+  - attack.t1547.006
