@@ -1,1 +1,25 @@
+title: Koske - Systemd Service Enabled for Persistence
+id: 5f83d212-cc3e-4ed8-a4fc-53f885a34e01
+status: experimental
+description: >
+  Detects enabling of systemd services which may be used to ensure persistence across reboots.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  exec:
+    process.executable: /usr/bin/systemctl
+  args:
+    process.args|contains: "enable"
+  condition: exec and args
+
+falsepositives:
+  - Legitimate service configuration
+
+level: high
+tags:
+  - attack.persistence
+  - attack.t1543.002
