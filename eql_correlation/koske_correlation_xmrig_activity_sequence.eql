@@ -1,1 +1,4 @@
-
+    sequence by host.name with maxspan=5s
+      [ process where process.executable == "/usr/bin/unzip" and auditd.log.record_type == "SYSCALL" ]
+      [ process where process.executable == "/usr/bin/mv" and auditd.log.record_type == "SYSCALL" ]
+      [ process where process.executable == "/usr/bin/chmod" and auditd.log.record_type == "SYSCALL" ]
