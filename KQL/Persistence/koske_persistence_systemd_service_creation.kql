@@ -1,0 +1,1 @@
+auditd.log.key : "creation_of_services\"ARCH=x86_64" or auditd.log.key : "systemctl_activit\"ARCH=x86_64" 
