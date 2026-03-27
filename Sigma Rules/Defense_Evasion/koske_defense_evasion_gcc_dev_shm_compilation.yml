@@ -1,1 +1,31 @@
+title: Koske - Suspicious GCC Compilation in /dev/shm
+id: 0acad525-513c-4c45-a46c-460cd1ddde01
+status: experimental
+description: >
+  Detects compilation of shared objects in /dev/shm using gcc, which may indicate
+  in-memory malware staging or evasion techniques.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  exec:
+    process.executable: /usr/bin/gcc
+  args:
+    process.args|contains:
+      - "/dev/shm/"
+  flags:
+    process.args|contains:
+      - "-shared"
+      - "-fPIC"
+  condition: exec and args and flags
+
+falsepositives:
+  - Legitimate development or compilation tasks
+
+level: high
+tags:
+  - attack.defense_evasion
+  - attack.t1574
