@@ -1,1 +1,1 @@
-
+process.executable : "/usr/bin/gcc" and process.args : /dev/shm/* and (process.args  : "-shared" or process.args  : "-fPIC")
