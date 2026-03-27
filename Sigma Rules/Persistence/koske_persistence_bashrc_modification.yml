@@ -1,1 +1,26 @@
 
+title: Koske - Bash Startup Script Modification
+id: e2ed37d5-23c3-43ec-8f5a-079421ae3601
+status: experimental
+description: >
+  Detects modification of bash startup scripts which may indicate persistence mechanisms.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
+
+detection:
+  selection:
+    auditd.log.key|contains:
+      - "modifications_of_bashrc"
+      - "modifications_of_bash_logout"
+  condition: selection
+
+falsepositives:
+  - User customization of shell configuration
+
+level: medium
+tags:
+  - attack.persistence
+  - attack.t1037.004
