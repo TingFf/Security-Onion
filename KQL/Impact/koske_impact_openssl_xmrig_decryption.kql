@@ -1,0 +1,6 @@
+process.executable : "/usr/bin/openssl" and
+process.args : "enc" and
+process.args : "-d" and
+process.args : "-in" and
+process.args : "-out" and
+process.args : "-pass"
