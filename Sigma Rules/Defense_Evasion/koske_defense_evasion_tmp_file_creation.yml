@@ -1,1 +1,23 @@
+title: Koske - Suspicious File Creation in /tmp
+id: 41f55dd7-8d75-4947-acdf-a9db316a1f01
+status: experimental
+description: >
+  Detects file creation in /tmp directory, which may be used by attackers for staging payloads or masquerading.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  selection:
+    auditd.log.key: "tmp_create"
+  condition: selection
+
+falsepositives:
+  - Temporary files created by legitimate applications
+
+level: low
+tags:
+  - attack.defense_evasion
+  - attack.t1564.001
