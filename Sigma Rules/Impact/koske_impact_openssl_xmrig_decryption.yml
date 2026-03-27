@@ -1,1 +1,30 @@
+title: Koske - OpenSSL Decryption of Payload
+id: a5be7afe-0b54-4d3a-9807-83ecb37d7201
+status: experimental
+description: >
+  Detects OpenSSL decryption operations used to unpack encrypted payloads such as XMrig miner.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  exec:
+    process.executable: /usr/bin/openssl
+  args:
+    process.args|contains|all:
+      - "enc"
+      - "-d"
+      - "-in"
+      - "-out"
+      - "-pass"
+  condition: exec and args
+
+falsepositives:
+  - Legitimate encryption/decryption workflows
+
+level: high
+tags:
+  - attack.impact
+  - attack.ta0040
