@@ -1,1 +1,25 @@
 
+title: Koske - File Creation in /dev/shm
+id: 80ebc4f6-37bf-4c66-8775-68517d3add01
+status: experimental
+description: >
+  Detects file creation in shared memory directory (/dev/shm), commonly abused by malware
+  for stealthy execution and fileless techniques.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
+
+detection:
+  selection:
+    auditd.log.key: "suspicious_file_creation_dev_shm"
+  condition: selection
+
+falsepositives:
+  - Legitimate applications using shared memory
+
+level: medium
+tags:
+  - attack.defense_evasion
+  - attack.t1574
