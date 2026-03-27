@@ -1,1 +1,25 @@
+title: Koske - Cron Job Persistence
+id: 599a4e49-7df1-44da-b31e-4390ddba4701
+status: experimental
+description: >
+  Detects creation or modification of cron jobs for persistence.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  selection:
+    auditd.log.key|contains:
+      - "cron_persistence"
+      - "crontab_activity"
+  condition: selection
+
+falsepositives:
+  - Scheduled administrative tasks
+
+level: medium
+tags:
+  - attack.persistence
+  - attack.t1053.003
