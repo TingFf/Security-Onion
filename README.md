@@ -17,8 +17,8 @@ This repository presents an end-to-end detection engineering project based on th
 
 The project demonstrates how to:
 
-Design Sigma detection rules
-Convert detections into SIEM queries (KQL/EQL)
-Configure Auditd rules for telemetry generation
-Perform threat hunting and correlation
-Map detections to the MITRE ATT&CK framework
+Design Sigma detection rules  
+Convert detections into SIEM queries (KQL/EQL)  
+Configure Auditd rules for telemetry generation  
+Perform threat hunting and correlation  
+Map detections to the MITRE ATT&CK framework  
