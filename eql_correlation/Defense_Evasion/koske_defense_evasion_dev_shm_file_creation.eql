@@ -1,1 +1,0 @@
-auditd.log.key : "suspicious_file_creation_dev_shm\"ARCH=x86_64" and auditd.log.record_type : "SYSCALL"
