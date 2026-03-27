@@ -1,0 +1,8 @@
+    process.executable : "/usr/sbin/iptables" and
+    process.args : "-P" and
+    process.args : "ACCEPT" and
+    (
+      process.args : "INPUT" or
+      process.args : "FORWARD" or
+      process.args : "OUTPUT"
+    )
