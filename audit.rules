@@ -1,0 +1,73 @@
+## First rule - delete all
+-D
+
+###########################################################
+
+# Log every time a user executes a command (General)
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/dd -k dd_activity
+# Always audit on syscall exit, but only when the syscall is a 64-bit execve, and the executed binary is /usr/bin/dd.”
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/x86_64-linux-gnu-gcc-13 -k gcc_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/as -k as_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/systemctl -k systemctl_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/curl -k curl_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/wget -k wget_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/openssl -k cryptography_activity
+
+# For event correlation to detect xrimg(Impact)
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/unzip -k unzip_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/mv -k mv_activity
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/bin/chmod -k chmod_activity
+-a always,exit -F arch=b64 -S execve -F path=/usr/bin/crontab -F auid>=1000 -F auid!=-1 -k crontab_activity
+
+# Any permission modifications
+-a always,exit -F arch=b64 -S execve -F auid>=1000 -F auid!=-1 -F exe=/usr/sbin/xtables-nft-multi -k firewall_tool
+
+# File creation in /tmp
+-a always,exit -F arch=b64 -S openat -F a2&0100 -F auid>=1000 -F auid!=-1 -F dir=/tmp/ -k tmp_create
+# -a always,exit -F arch=b64 -S openat -F a2&0x40 -F a2&0x80 -F auid>=1000 -F auid!=-1 -F dir=/tmp -F key=tmp_create
+
+# openat and creat are specific syscall to kernel to create file.
+
+# Renames in /tmp (masquerading)
+# -a always,exit -F arch=b64 -S rename,renameat,renameat2 -F auid>=1000 -F auid!=-1 -F dir=/tmp -k tmp_rename
+
+# Monitor compiler usage
+-a always,exit -F arch=b64 -S openat -F a2&0100 -F auid>=1000 -F auid!=-1 -F dir=/dev/shm/ -k suspicious_file_creation_dev_shm
+
+# Monitor changes to user bash configuration
+-a always,exit -F arch=b64 -S openat -F perm=wa -F auid>=1000 -F auid!=-1 -F path=/home/angtingfeng/.bashrc -k modifications_of_bashrc
+-a always,exit -F arch=b64 -S openat -F perm=wa -F auid>=1000 -F auid!=-1 -F path=/home/angtingfeng/.bash_logout -k modifications_of_bash_logout
+
+# Persist via Kernel Object File using RC Scripts
+-a always,exit -F arch=b64 -S openat -F path=/etc/rc.local -F perm=wa -F auid>=1000 -F auid!=-1 -k modifications_of_rc_local
+-a always,exit -F arch=b64 -S openat -F path=/etc/rc.modules -F perm=wa -F auid>=1000 -F auid!=-1 -k modifications_of_rc_modules
+
+# Monitor Systemd unit file creation and modification
+-a always,exit -F arch=b64 -S openat -F dir=/etc/systemd/system/ -F perm=wa -F auid>=1000 -F auid!=-1 -k creation_of_services
+
+# Modifications in environment variables
+-a always,exit -F arch=b64 -S openat -F path=/etc/environment -F perm=wa -F auid>=1000 -F auid!=-1 -k modifications_of_environment_variables
+-a always,exit -F arch=b64 -S openat -F path=/etc/profile -F perm=wa -F auid>=1000 -F auid!=-1 -k modifications_of_environment_variables
+
+# Monitor crontab changes
+-a always,exit -F arch=b64 -S openat -F dir=/var/spool/cron/crontabs/ -F perm=wa -F auid>=1000 -F auid!=-1 -k cron_persistence
+# -w /etc/cron.d/ -p wa -F auid>=1000 -F auid!=-1 -k cron_persistence (Not using in my script hence remove but in real th should include)
+
+# Internal Proxy
+-a always,exit -F arch=b64 -S openat -F path=/home/angtingfeng/.bashrc -F perm=r -F auid>=1000 -F auid!=-1 -k reading_bashrc
+-a always,exit -F arch=b64 -S openat -F path=/etc/environment -F perm=r -F auid>=1000 -F auid!=-1 -k reading_environment
+-a always,exit -F arch=b64 -S openat -F path=/home/angtingfeng/.profile -F perm=r -F auid>=1000 -F auid!=-1 -k reading_profile
+
+###########################################################
+
+## Increase the buffers to survive stress events.
+## Make this bigger for busy systems
+-b 8192
+
+## This determine how long to wait in burst of events
+--backlog_wait_time 60000
+
+## Set failure mode to syslog
+
+
+
