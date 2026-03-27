@@ -1,1 +1,33 @@
 
+title: Koske - IPTables Policy Modification
+id: db6d8348-02ac-41be-a507-8e197ea74001
+status: experimental
+description: >
+  Detects modification of iptables default policies to ACCEPT, which may disable firewall protections.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
+
+detection:
+  exec:
+    process.executable: '/usr/sbin/iptables'
+  args:
+    process.args|contains|all:
+      - '-P'
+      - 'ACCEPT'
+  chain:
+    process.args|contains:
+      - 'INPUT'
+      - 'FORWARD'
+      - 'OUTPUT'
+  condition: exec and args and chain
+
+falsepositives:
+  - Administrative firewall configuration
+
+level: high
+tags:
+  - attack.defense_evasion
+  - attack.t1562.004
