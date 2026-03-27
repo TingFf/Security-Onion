@@ -18,7 +18,11 @@ detection:
       - 'bs='
       - 'skip='
   condition: selection_exec and selection_args
-
+  
+falsepositives:
+  - Disk imaging or backup scripts
+  - Forensic data extraction
+  
 level: high
 tags:
   - attack.execution
