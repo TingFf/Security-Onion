@@ -1,0 +1,25 @@
+title: Koske - Suspicious Payload Extraction via DD
+id: 1f6b8a20-01a1-4b71-9a44-123456789001
+status: experimental
+description: >
+  Detects suspicious use of dd with byte-skipping (bs and skip arguments),
+  commonly used to extract embedded payloads from polyglot binaries in the Koske malware campaign.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
+
+detection:
+  selection_exec:
+    process.executable: '/usr/bin/dd'
+  selection_args:
+    process.args|contains|all:
+      - 'bs='
+      - 'skip='
+  condition: selection_exec and selection_args
+
+level: high
+tags:
+  - attack.execution
+  - attack.t1027
