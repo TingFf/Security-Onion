@@ -1,0 +1,15 @@
+process.executable : "/usr/bin/curl" and
+(
+  process.args : "-s" or
+  process.args : *panda_v14 or
+  process.args : *panda_h14
+)
+or
+(  
+  process.executable : "/usr/bin/wget" and  
+  (  
+    process.args : "bs=1" or  
+    process.args : *panda_v14 or  
+    process.args : *panda_h14  
+  )  
+)
