@@ -1,0 +1,1 @@
+auditd.log.record_type : "SYSCALL" and (auditd.log.key : "cron_persistence\"ARCH=x86_64" or auditd.log.key : "crontab_activity\"ARCH=x86_64")
