@@ -1,0 +1,4 @@
+    sequence by host.name with maxspan=5s
+     [ process where auditd.log.key regex ".*reading_bashrc.*" and auditd.log.record_type == "SYSCALL" ]
+     [ process where auditd.log.key regex ".*reading_environment.*" and auditd.log.record_type == "SYSCALL" ]
+     [ process where auditd.log.key regex ".*reading_profile.*" and auditd.log.record_type == "SYSCALL" ]
