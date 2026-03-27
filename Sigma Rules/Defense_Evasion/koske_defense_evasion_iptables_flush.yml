@@ -1,1 +1,29 @@
 
+title: Koske - IPTables Rule Flush
+id: 4bbaac27-ee82-475f-bbc6-6a8b068bb201
+status: experimental
+description: >
+  Detects flushing of firewall rules using iptables, which may indicate defense evasion.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
+
+detection:
+  exec:
+    process.executable: '/usr/sbin/iptables'
+  args:
+    process.args|contains:
+      - '-F'
+      - '-X'
+      - '-Z'
+  condition: exec and args
+
+falsepositives:
+  - Legitimate firewall reconfiguration
+
+level: high
+tags:
+  - attack.defense_evasion
+  - attack.t1562.004
