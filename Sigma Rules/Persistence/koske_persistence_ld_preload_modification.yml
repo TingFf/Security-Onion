@@ -1,1 +1,23 @@
+title: Koske - LD_PRELOAD Environment Manipulation
+id: a93178f4-333c-469b-930a-468b93e40601
+status: experimental
+description: >
+  Detects modification of environment variables such as LD_PRELOAD for persistence or privilege escalation.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  selection:
+    auditd.log.key: "modifications_of_environment_variables"
+  condition: selection
+
+falsepositives:
+  - Legitimate environment configuration changes
+
+level: high
+tags:
+  - attack.persistence
+  - attack.t1546.006
