@@ -1,0 +1,11 @@
+process.executable : "/usr/sbin/iptables" and
+(
+  process.args : "-F" or
+  process.args : "-X" or
+  process.args : "-Z" or
+  process.args : "filter" or
+  process.args : "nat" or
+  process.args : "mangle" or
+  process.args : "raw" or
+  process.args : "security"
+)
