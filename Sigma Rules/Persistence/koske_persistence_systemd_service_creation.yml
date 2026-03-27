@@ -1,1 +1,25 @@
+title: Koske - Suspicious Systemd Service Creation
+id: 74a1d0c1-5e48-493a-aeb4-8018a7633301
+status: experimental
+description: >
+  Detects creation or modification of systemd services, which may indicate persistence mechanisms.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
 
+detection:
+  selection:
+    auditd.log.key|contains:
+      - "creation_of_services"
+      - "systemctl_activit"
+  condition: selection
+
+falsepositives:
+  - Legitimate service installations
+
+level: high
+tags:
+  - attack.persistence
+  - attack.t1543.002
