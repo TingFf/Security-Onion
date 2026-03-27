@@ -1,0 +1,5 @@
+process.executable : "/usr/bin/dd" and
+(
+  process.args : bs=* or
+  process.args : skip=*
+)
