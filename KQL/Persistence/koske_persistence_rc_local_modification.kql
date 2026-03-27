@@ -1,0 +1,1 @@
+auditd.log.key : "modifications_of_rc_local\"ARCH=x86_64" or auditd.log.key : "modifications_of_rc_modules\"ARCH=x86_64" 
