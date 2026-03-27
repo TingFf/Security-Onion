@@ -1,1 +1,32 @@
 
+title: Koske - Payload Download via Curl or Wget
+id: 3d2983f1-0ec1-405d-8113-aa134d0f4501
+status: experimental
+description: >
+  Detects suspicious payload downloads using curl or wget referencing known Koske campaign artifacts.
+author: Ting Feng
+date: 2026-03-27
+logsource:
+  product: linux
+  service: auditd
+
+detection:
+  curl:
+    process.executable: /usr/bin/curl
+    process.args|contains:
+      - "panda_v14"
+      - "panda_h14"
+  wget:
+    process.executable: /usr/bin/wget
+    process.args|contains:
+      - "panda_v14"
+      - "panda_h14"
+  condition: curl or wget
+
+falsepositives:
+  - Legitimate file downloads with similar naming patterns
+
+level: high
+tags:
+  - attack.execution
+  - attack.t1059.004
