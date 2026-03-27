@@ -1,0 +1,1 @@
+event.dataset : "zeek.http"  and http.uri :"/lab?" and not (destination.ip == client.ip) and not destination.ip: 127.0.0.0/8
